@@ -23,8 +23,8 @@ app.get('/books/:id', async (req, res) => {
     const book = books.find(book => book.id === id)
     if(book){
         try {
-            const authorResponse = await axios.get(`http://localhost:4000/authors/${book.authorId}`);
-            const categoryResponse = await axios.get(`http://localhost:5000/categories/${book.categoryId}`);
+            const authorResponse = await axios.get(`http://author-service:4000/authors/${book.authorId}`);
+            const categoryResponse = await axios.get(`http://categories-service:5000/categories/${book.categoryId}`);
             const author = authorResponse.data;
             const category = categoryResponse.data;
             const bookDetails = {

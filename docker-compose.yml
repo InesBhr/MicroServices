@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  authors-service:
+    build: ./authors
+    ports:
+      - "4000:4000"
+    networks:
+      - api-network
+  books-service:
+    build: ./books
+    ports:
+      - "3000:3000"
+    networks:
+      - api-network
+  categories-service:
+    build: ./categories
+    ports:
+      - "5000:5000"
+    networks:
+      - api-network
+networks:
+  api-network:
+    driver: bridge
