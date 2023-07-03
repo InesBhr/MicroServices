@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+import  EventBus  from "./eventBus.js";
 
 app.use(bodyParser.json());
 
@@ -32,6 +33,22 @@ app.get('/categories/:id', async (req, res) => {
     }
 });
 
+EventBus.subscriber("CategoryCreated", (category) => {
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(category)
+    };
+  
+    fetch("http://localhost:5000/categories", options)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Category created in the microservice Category :", data);
+      })
+      .catch((error) => {
+        console.error("Error while creating the category:", error);
+      });
+  });
 app.listen(5000,()=>{
     console.log("Microservices démarré")
 })

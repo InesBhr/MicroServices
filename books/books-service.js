@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 app.use(bodyParser.json());
-
+import  EventBus  from "./eventBus.js";
 
 
 let books = [
@@ -42,6 +42,22 @@ app.get('/books/:id', async (req, res) => {
     }
 });
 
+EventBus.subscriber("BookCreated", (book) => {
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(book)
+    };
+  
+    fetch("http://localhost:3000/books", options)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Book created in the microservice Book :", data);
+      })
+      .catch((error) => {
+        console.error("Error while creating the Book :", error);
+      });
+  });
 
 app.listen(3000,()=>{
     console.log("Microservices démarré")

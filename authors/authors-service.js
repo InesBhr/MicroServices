@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+import  EventBus  from "./eventBus.js";
 
 app.use(bodyParser.json());
 
@@ -31,6 +32,24 @@ app.get('/authors/:id', async (req, res) => {
         }  
     }
 });
+
+EventBus.subscriber("authorCreated", (author) => {
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(author)
+    };
+  
+    fetch("http://localhost:4000/authors", options)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Author created in the microservice Author :", data);
+      })
+      .catch((error) => {
+        console.error("Error while creating the Author :", error);
+      });
+  });
+
 
 app.listen(4000,()=>{
     console.log("Microservices démarré")
